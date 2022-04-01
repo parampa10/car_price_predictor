@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Car price prediction project</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </head>
+    <body class="gradient-custom">
+    <div class="center">
+        <h1 class="mt-5 text-white">Car Price Predictor</h1>
+    </div>
+    <section class="vh-100 ">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+    
+            <form action="/home/predict" method="POST">
+                {% csrf_token %}
+                <div class="md-5 mt-md-4 ">
+                    
+                <h2 class="fw-bold mb-2 text-uppercase">Enter Car Details</h2>
+                <br>
+
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label float-left" for="typeEmailX">Car Company Name</label>
+                    <select class="selectpicker form-control form-control-lg" name="company" id="company_id" onchange="show_models()">
+                        {% for company in companies%}
+                            <option value={{company}}>{{company}}</option>
+                        {% endfor %}
+                    </select>   
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label float-left" for="typeEmailX">Car Model Name</label>
+                    <select class="selectpicker form-control form-control-lg" name="car_model" id="car_model_id">
+                        
+                    </select>
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label float-left" for="typeEmailX">Fuel Type</label>
+                    <select class="selectpicker form-control form-control-lg" id="fuel_id" name="fuel_type" >
+                        {% for fuel in fuels%}
+                            <option value={{fuel}}>{{fuel}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label float-left" for="typeEmailX">Year</label>
+                    <select class="selectpicker form-control form-control-lg" id="year_id" name="year">
+                        {% for year in years%}
+                            <option value={{year}}>{{year}}</option>
+                        {% endfor %}
+                    </select>                </div>
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label float-left" for="typeEmailX">Kms Driven</label>
+                    <input type="number" class="form-control form-control-lg" name="kms_driven"/>
+                </div>
+
+
+                <input class="btn btn-outline-light btn-lg px-5" type="submit" value="Predict!" required>
+
+                </div>
+
+            </form><br>
+            <div><h1>{{result}}</h1></div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+    <div class>
+
+    </div>
+
+
+    <script>
+        function show_models()
+        {
+            var company_var = document.getElementById("company_id").value;
+            var car_model_var = document.getElementById("car_model_id");
+            
+            car_model_var.value=""
+            car_model_var.innerHTML=""
+            
+            {% for car_model in car_models %}
+                if(  "{{car_model}}".includes(company_var)){
+                    var newoption=document.createElement("option");
+                    newoption.value="{{car_model}}";
+                    newoption.innerHTML="{{car_model}}";
+                    car_model_var.options.add(newoption);
+                
+                }
+            {% endfor %}
+
+        }
+
+        
+
+
+
+
+    </script>
+
+    </body>
+</html>
